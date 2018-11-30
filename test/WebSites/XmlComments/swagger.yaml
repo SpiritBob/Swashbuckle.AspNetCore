@@ -1,0 +1,115 @@
+openapi: 3.0.1
+info:
+  title: XmlComments
+  version: '1.0'
+paths:
+  /Users:
+    post:
+      tags:
+        - Users
+      summary: Create a user
+      description: Creates a new user in the system with the provided `username`
+      operationId: CreateUser
+      requestBody:
+        description: The user details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32
+        default:
+          description: Unexpected error
+        '400':
+          description: Invalid request
+      x-operationId: CreateUser
+    get:
+      tags:
+        - Users
+      summary: Retrieve all users
+      description: Lists all users in the system
+      operationId: GetUsers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+      x-operationId: GetUsers
+  /Users/search:
+    get:
+      tags:
+        - Users
+      summary: Search users by keywords
+      description: Supports pagination through the `PageNo` and `PageSize` parameters
+      operationId: SearchUsers
+      parameters:
+        - name: keywords
+          in: query
+          description: The search keywords
+          schema:
+            type: string
+          example: foobar
+        - name: PageNo
+          in: query
+          description: Pagination page number
+          schema:
+            type: integer
+            description: Pagination page number
+            format: int32
+            example: 5
+          example: 5
+        - name: PageSize
+          in: query
+          description: Pagination page size
+          schema:
+            type: integer
+            description: Pagination page size
+            format: int32
+            example: 20
+          example: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+      x-operationId: SearchUsers
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique ID
+          format: int32
+          readOnly: true
+          example: 123
+        username:
+          type: string
+          description: Unique username
+          nullable: true
+          example: johnsmith
+      additionalProperties: false
+      description: A user
+tags:
+  - name: Users
+    description: Manage users
